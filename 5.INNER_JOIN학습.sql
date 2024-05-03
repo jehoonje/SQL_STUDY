@@ -135,3 +135,92 @@ where E.addr LIKE '%용인%'
 --    AND E.dept_cd = D.dept_cd 조인 조건을 ON으로  FROM에 콤마 대신 JOIN
     AND E.emp_nm LIKE '김%'
 ;
+
+
+
+-- 1980년대생 사원들의 사번, 사원명, 부서명, 
+-- 자격증명, 취득일자 조회
+SELECT
+       E.emp_no, E.emp_nm , D.dept_nm, C.certi_nm, EC.acqu_de 
+FROM tb_emp E 
+JOIN tb_dept D 
+ON E.dept_cd = D.dept_cd
+JOIN tb_emp_certi EC
+ON E.emp_no = EC.emp_no
+JOIN tb_certi C
+ON  C.certi_cd = EC.certi_cd
+WHERE  E.birth_de BETWEEN '19800101' AND '19891231'
+;
+--조인을 왜씀?(?)
+
+
+-- INNER 조인은 두 테이블 간에
+-- 연관데이터가 있는 경우에만 사용
+-- 어떤 쇼핑몰회원이 한건도 주문하지 않은 경우
+
+
+ --               순           서           
+
+-- SELECT [DISTINCT] { 열이름 .... } 
+-- FROM  테이블 또는 뷰 이름
+-- JOIN  테이블 또는 뷰 이름     (추가 테이블이 필요한 경우)
+-- ON    조인 조건
+--WHERE 조회 조건
+-- GROUP BY  열을 그룹화
+-- HAVING    그룹화 조건
+-- ORDER BY  정렬할 열 [ASC | DESC];
+
+
+-- 조인 조건을 안걸면 카테시안 곱이 만들어짐
+
+
+-- # CROSS JOIN
+
+SELECT
+    *
+FROM test_a 
+CROSS JOIN test_b     -- 크로스조인 걍조건 없이 걍 다됨
+;
+
+
+
+
+
+-- # NATURAL JOIN
+-- 1. NATURAL JOIN은 동일한 이름을 갖는 컬럼들에 대해 자동으로 조인조건을 생성하는 기법입니다.
+-- 2. 즉, 자동으로 2개 이상의 테이블에서 같은 이름을 가진 컬럼을 찾아 INNER조인을 수행합니다.
+-- 3. 이 때 조인되는 동일 이름의 컬럼은 데이터 타입이 같아야 하며, 
+--    ALIAS나 테이블명을 자동 조인 컬럼 앞에 표기하면 안됩니다.
+-- 4. SELECT * 문법을 사용하면, 공통 컬럼은 집합에서 한번만 표기됩니다.
+-- 5. 공통 컬럼이 n개 이상이면 조인 조건이 n개로 처리됩니다.
+
+-- 사원 테이블과 부서 테이블을 조인 (사번, 사원명, 부서코드, 부서명)
+
+SELECT 
+   -- A.emp_no, A.emp_nm, dept_cd, B.dept_nm
+   *
+   -- NATURAL JOIN은 공통컬럼 한번만 출력하기 때매 식별자 B이런거 안함
+FROM tb_emp A
+NATURAL JOIN tb_dept B
+-- ON A.dept_cd = B.dept_cd
+;
+
+
+
+
+SELECT
+    *
+FROM test_a  A
+INNER JOIN test_b    B 
+ON A.id = B.a_id
+;
+
+SELECT
+    *
+FROM test_a  A
+NATURAL JOIN test_b    B 
+
+;
+
+
+
